@@ -1,5 +1,4 @@
-# Cloud Wallpaper Rotator (CWR)
-# Linux and Google Drive Only (for now)!
+# Cloud Wallpaper Rotator (CWR) *Google Drive only right now, Scripts run on Linux w/ Gnome based DEs!*
 
 CWR, downloads a single wallpaper from a designated Google Drive folder randomly and then through the use of scripts can set the Wallpaper on your desktop.
 
