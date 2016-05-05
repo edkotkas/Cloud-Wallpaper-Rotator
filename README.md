@@ -54,6 +54,10 @@ while true; do
 done
 
 ```
+Sample of Windows script to change the wallpaper. (UNTESTED!)
+```batch
+reg add "HKCU\Control Panel\Desktop" /v Wallpaper /f /t REG_SZ /d c:\set\path\to\wallpaper.png
+```
 
 ### Todos
 
