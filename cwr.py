@@ -4,6 +4,8 @@ import os
 import json
 import random
 import time
+import datetime
+import platform
 
 
 class History(object):
@@ -53,6 +55,20 @@ class Cache(object):
         with open(self.cache_file, "w+") as cache:
             cache.writelines(i + "\n" for i in imageList)
 
+        real_path = "/".join(
+            str(os.path.realpath(__file__)).split("/")[:-1]
+        ) + "/"
+
+        cache_date = None
+
+        with open(real_path + "settings.json", "r") as settings:
+            cache_date = json.load(settings)
+
+        cache_date["lastCacheUpdate"] = datetime.date.today()
+
+        with open(self.realpath + "/settings.json", "w+") as settings:
+            cache_date = json.dump(cache_date, settings)
+
     def retrieveList(self):
         with open(self.cache_file, "r") as cache:
             return [str(imageId).strip() for imageId in cache.readlines()]
@@ -66,7 +82,6 @@ class Background(object):
         ) + "/"
 
         self.output = self.realpath + "wallpaper.png"
-        self.wallpaper = None
 
         with open(self.realpath + "settings.json", "r") as settings:
             self.settings = json.load(settings)
@@ -128,14 +143,37 @@ class Background(object):
             imageList = self.history.retrieve()
             self.retrieveFile(imageList[-2])
 
+    def setWindowsBackground(wallpaper):
+        import ctypes
+        SPI_SETDESKWALLPAPER = 20
+        ctypes.windll.user32.SystemParametersInfoA(
+            SPI_SETDESKWALLPAPER,
+            0,
+            wallpaper,
+            0
+        )
+
+    def main(self, x, cache):
+        background = self
+        background.cacheFileList(cache)
+
+        if x == 0:
+            background.previousWallpaper()
+
+        if x == 1:
+            background.nextWallpaper()
+
+        if platform.system() == "Windows":
+            self.setWindowsBackground(background.wallpaper)
+
+        if platform.system == "Linux":
+            print("linux")
+
+
 if __name__ == '__main__':
     import sys
     try:
         x, cache = int(sys.argv[1]), bool(int(sys.argv[2]))
-        Background().cacheFileList(cache)
-        if x == 0:
-            Background().previousWallpaper()
-        if x == 1:
-            Background().nextWallpaper()
+        Background.main(x, cache)
     except:
         raise AttributeError("Invalid arguments.")
