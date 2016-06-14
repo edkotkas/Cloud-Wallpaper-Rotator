@@ -3,75 +3,12 @@ from pydrive.drive import GoogleDrive
 import os
 import json
 import random
-import time
-import datetime
 import platform
 
-
-class History(object):
-
-    def __init__(self, settings):
-        self.settings = settings
-        self.history_file = None
-
-    def setHistoryFile(self, history_file):
-        self.history_file = history_file
-
-    def preserve(self, fileId):
-        if self.status() is True:
-            with open(self.history_file, "a") as history_file:
-                history_file.write(fileId + "\n")
-
-    def clear(self):
-        with open(self.history_file, "w") as history_file:
-            history_file.write("")
-
-    def retrieve(self):
-        with open(self.history_file, "r") as history:
-            return [str(imageId).strip() for imageId in history.readlines()]
-
-    def status(self):
-        return bool(self.settings["history"])
-
-    def disable(self):
-        if self.status():
-            self.settings["history"] = 0
-            self.clear()
-        print("Already off.")
-
-    def enable(self):
-        if not self.status():
-            self.settings["history"] = 1
-        print("Already on.")
-
-
-class Cache(object):
-
-    def __init__(self, cache_file):
-        self.cache_file = cache_file
-        self.cache_age = int(time.time() - os.path.getmtime(self.cache_file))
-
-    def preserve(self, imageList):
-        with open(self.cache_file, "w+") as cache:
-            cache.writelines(i + "\n" for i in imageList)
-
-        real_path = "/".join(
-            str(os.path.realpath(__file__)).split("/")[:-1]
-        ) + "/"
-
-        cache_date = None
-
-        with open(real_path + "settings.json", "r") as settings:
-            cache_date = json.load(settings)
-
-        cache_date["lastCacheUpdate"] = datetime.date.today()
-
-        with open(self.realpath + "/settings.json", "w+") as settings:
-            cache_date = json.dump(cache_date, settings)
-
-    def retrieveList(self):
-        with open(self.cache_file, "r") as cache:
-            return [str(imageId).strip() for imageId in cache.readlines()]
+# custom management imports
+import manager.history as History
+import manager.cache as Cache
+import manager.settings as Settings
 
 
 class Background(object):
@@ -143,7 +80,7 @@ class Background(object):
             imageList = self.history.retrieve()
             self.retrieveFile(imageList[-2])
 
-    def setWindowsBackground(wallpaper):
+    def setWindowsBackground(self, wallpaper):
         import ctypes
         SPI_SETDESKWALLPAPER = 20
         ctypes.windll.user32.SystemParametersInfoA(
@@ -152,6 +89,9 @@ class Background(object):
             wallpaper,
             0
         )
+
+    def setLinuxBackground(self, wallpaper):
+        print("linux")
 
     def main(self, x, cache):
         background = self
@@ -167,7 +107,7 @@ class Background(object):
             self.setWindowsBackground(background.wallpaper)
 
         if platform.system == "Linux":
-            print("linux")
+            self.setLinuxBackground(background.wallpaper)
 
 
 if __name__ == '__main__':
