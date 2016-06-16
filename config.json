@@ -1,0 +1,7 @@
+{
+    "folderId": "folder ID here",
+    "history": 1,
+    "orderBy": "recency",
+    "rotationFrequency": "15m",
+    "cachePeriod": 2,
+}

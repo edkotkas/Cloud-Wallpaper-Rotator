@@ -8,7 +8,7 @@ import manager.Manager as Manager
 class CloudWallpaperRotator(object):
 
     def __init__(self):
-        self.outputFile = Helper.realPath + "wallpaper.png"
+        self.outputFile = Helper.realPath("wallpaper.png")
 
         self.manager = Manager(Helper.realPath("config.json"))
 
