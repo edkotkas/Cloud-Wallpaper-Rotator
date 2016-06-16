@@ -1,33 +1,18 @@
-import time
-import os
-import json
-import datetime
+from store import Store
 
 
-class Cache(object):
+class Cache(Store):
 
-    def __init__(self, cache_file):
-        self.cache_file = cache_file
-        self.cache_age = int(time.time() - os.path.getmtime(self.cache_file))
+    def __init__(self, cacheFile):
+        Store.__init__(self, cacheFile)
 
-    def preserve(self, imageList):
-        with open(self.cache_file, "w+") as cache:
-            cache.writelines(i + "\n" for i in imageList)
+    def cacheFileList(self, drive, folderId):
+        driveFiles = drive.ListFile({
+            'orderBy': self.orderBy,
+            'q': "'" +
+            folderId +
+            "' in parents and trashed=false"
+        }).GetList()
+        print("Caching [%d] wallpapers..." % len(driveFiles))
 
-        real_path = "/".join(
-            str(os.path.realpath(__file__)).split("/")[:-1]
-        ) + "/"
-
-        cache_date = None
-
-        with open(real_path + "settings.json", "r") as settings:
-            cache_date = json.load(settings)
-
-        cache_date["lastCacheUpdate"] = datetime.date.today()
-
-        with open(self.realpath + "/settings.json", "w+") as settings:
-            cache_date = json.dump(cache_date, settings)
-
-    def retrieveList(self):
-        with open(self.cache_file, "r") as cache:
-            return [str(imageId).strip() for imageId in cache.readlines()]
+        self.preserve([files['id'] for files in driveFiles])

@@ -1,3 +1,2 @@
-import History
-import Settings
-import Cache
+import mgr.Manager as Manager
+import helper.Helper as Helper
