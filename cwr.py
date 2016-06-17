@@ -1,21 +1,17 @@
-from pydrive.drive import GoogleDrive
+import time
 
 # custom management imports
-import manager.Helper as Helper
-import manager.Manager as Manager
+from manager import Manager, Helper
 
 
-class CloudWallpaperRotator(object):
+class CloudWallpaperRotator(Manager):
 
-    def __init__(self):
-        self.outputFile = Helper.realPath("wallpaper.png")
+    def service(self):
+        Helper().printer("Starting [CWR] Service")
+        while True:
+            self.getNext()
+            self.background.setLinuxBackground(self.outputFile)
+            time.sleep(self.updateFrequency())
 
-        self.manager = Manager(Helper.realPath("config.json"))
-
-        self.drive = GoogleDrive(
-            self.manager.googleAuthenticator()
-        )
-
-    def retrieveFile(self, imageId):
-        print("Downloading wallpaper...")
-        self.drive.CreateFile({'id': imageId}).GetContentFile(self.wallpaper)
+if __name__ == '__main__':
+    CloudWallpaperRotator().service()

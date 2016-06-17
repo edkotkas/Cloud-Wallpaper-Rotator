@@ -3,5 +3,5 @@
     "history": 1,
     "orderBy": "recency",
     "rotationFrequency": "15m",
-    "cachePeriod": 2,
+    "cachePeriod": 2
 }

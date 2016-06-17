@@ -1,10 +1,21 @@
-# import random
-# import platform
+import platform
+import subprocess
+
+# custom management imports
+from helper import Helper
 
 
 class Background(object):
 
+    def setBackground(self, wallpaper):
+        if platform.system == "Windows":
+            self.setWindowsBackground(wallpaper)
+
+        if platform.system == "Linux":
+            self.setLinuxBackground(wallpaper)
+
     def setWindowsBackground(self, wallpaper):
+        Helper().printer("Setting Windows wallpaper")
         import ctypes
         SPI_SETDESKWALLPAPER = 20
         ctypes.windll.user32.SystemParametersInfoA(
@@ -15,4 +26,8 @@ class Background(object):
         )
 
     def setLinuxBackground(self, wallpaper):
-        print("linux")
+        Helper().printer("Settings Linux wallpaper")
+        subprocess.call([
+            "gsettings", "set", "org.gnome.desktop.background", "picture-uri",
+            "file://" + wallpaper
+        ])

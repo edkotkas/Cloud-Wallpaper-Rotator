@@ -1,0 +1,7 @@
+*.pyc
+.cache
+.history
+.credentials
+myconfig.json
+client_secrets.json
+wallpaper.png

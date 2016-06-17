@@ -1,2 +1,2 @@
-import mgr.Manager as Manager
-import helper.Helper as Helper
+from mgr import *
+from helper import *
