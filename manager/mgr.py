@@ -15,7 +15,7 @@ from background import Background
 class Manager(object):
 
     def __init__(self):
-        settingsFile = Helper().realPath("myconfig.json")
+        settingsFile = Helper().realPath("config.json")
         with open(settingsFile, "r") as settings:
             _settings = json.load(settings)
 
