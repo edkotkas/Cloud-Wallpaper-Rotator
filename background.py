@@ -8,14 +8,17 @@ from helper import Helper
 class Background(object):
 
     def setBackground(self, wallpaper):
-        if platform.system == "Windows":
+        Helper().printer("Settings wallpaper for %s" % (platform.system()))
+        if platform.system() == "Windows":
             self.setWindowsBackground(wallpaper)
 
-        if platform.system == "Linux":
+        if platform.system() == "Linux":
             self.setLinuxBackground(wallpaper)
 
+        if platform.system() == "OSX":
+            self.setMacBackground(wallpaper)
+
     def setWindowsBackground(self, wallpaper):
-        Helper().printer("Setting Windows wallpaper")
         import ctypes
         SPI_SETDESKWALLPAPER = 20
         ctypes.windll.user32.SystemParametersInfoA(
@@ -26,8 +29,10 @@ class Background(object):
         )
 
     def setLinuxBackground(self, wallpaper):
-        Helper().printer("Settings Linux wallpaper")
         subprocess.call([
             "gsettings", "set", "org.gnome.desktop.background", "picture-uri",
             "file://" + wallpaper
         ])
+
+    def setMacBackground(self, wallpaper):
+        print("")

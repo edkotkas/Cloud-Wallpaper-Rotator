@@ -35,6 +35,14 @@ class Manager(object):
         cache = Helper().realPath(".cache")
         history = Helper().realPath(".history")
 
+        # if not os.path.isfile(cache):
+        #     Helper().printer("Generating cache file")
+        #     open(cache, "w").close()
+        #
+        # if not os.path.isfile(history):
+        #     Helper().printer("Generating history file")
+        #     open(history, "w").close()
+
         self.history = History(history)
         self.cache = Cache(cache)
         self.background = Background()
@@ -84,7 +92,7 @@ class Manager(object):
                 self.orderBy
             )
 
-    def getNext(self):
+    def getNextBackground(self):
         wallpaper = random.choice(self.cache.retrieveList())
 
         if self.holdHistory is True:
@@ -92,7 +100,7 @@ class Manager(object):
 
         self.retrieveFile(wallpaper)
 
-    def getPrevious(self):
+    def getPreviousBackground(self):
         if self.holdHistory is True:
             Helper().printer("Accessing local history")
             history = self.history.retrieveList()
@@ -107,3 +115,4 @@ class Manager(object):
     def retrieveFile(self, imageId):
         Helper().printer("Downloading wallpaper")
         self.drive.CreateFile({'id': imageId}).GetContentFile(self.outputFile)
+        Helper().printer("Downloaded wallpaper")

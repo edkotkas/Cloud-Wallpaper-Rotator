@@ -1,17 +1,20 @@
 import time
 
 # custom management imports
-from manager import Manager, Helper
+from mgr import Manager
+from helper import Helper
 
 
 class CloudWallpaperRotator(Manager):
 
     def service(self):
         Helper().printer("Starting [CWR] Service")
+        self.updateWallpaperCache()
         while True:
-            self.getNext()
-            self.background.setLinuxBackground(self.outputFile)
+            self.getNextBackround()
+            self.background.setBackground(self.outputFile)
             time.sleep(self.updateFrequency())
+
 
 if __name__ == '__main__':
     CloudWallpaperRotator().service()
