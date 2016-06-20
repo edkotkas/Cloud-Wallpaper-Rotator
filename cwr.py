@@ -11,7 +11,7 @@ class CloudWallpaperRotator(Manager):
         Helper().printer("Starting [CWR] Service")
         self.updateWallpaperCache()
         while True:
-            self.getNextBackround()
+            self.getNextBackground()
             self.background.setBackground(self.outputFile)
             time.sleep(self.updateFrequency())
 

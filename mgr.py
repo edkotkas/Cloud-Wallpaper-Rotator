@@ -35,14 +35,6 @@ class Manager(object):
         cache = Helper().realPath(".cache")
         history = Helper().realPath(".history")
 
-        # if not os.path.isfile(cache):
-        #     Helper().printer("Generating cache file")
-        #     open(cache, "w").close()
-        #
-        # if not os.path.isfile(history):
-        #     Helper().printer("Generating history file")
-        #     open(history, "w").close()
-
         self.history = History(history)
         self.cache = Cache(cache)
         self.background = Background()
@@ -83,9 +75,14 @@ class Manager(object):
         return gauth
 
     def updateWallpaperCache(self, forceUpdate=False):
+        if not os.path.isfile(self.cache.fileName):
+            Helper().printer("Generating cache file")
+            open(self.cache.fileName, "w").close()
+            forceUpdate = True
+
         cacheAge = int(time.time() - os.path.getmtime(self.cache.fileName))
 
-        if cacheAge >= self.cachePeriod or forceUpdate is True:
+        if forceUpdate is True or cacheAge >= self.cachePeriod:
             self.cache.cacheWallpapers(
                 self.drive,
                 self.folderId,
