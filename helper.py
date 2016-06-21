@@ -8,6 +8,9 @@ class Helper(object):
         self.realPath = lambda fileReference: os.path.realpath(fileReference)
 
     def printer(self, message):
-        print("[CWR] NOTICE <%s>: %s." % (time.strftime("%H:%M:%S"), message))
+        notice = "[CWR] NOTICE <%s>: %s." %\
+            (time.strftime("%H:%M:%S"), message)
 
-        return
+        print(notice)
+        with open("log", "a") as log:
+            log.writelines(notice + "\n")

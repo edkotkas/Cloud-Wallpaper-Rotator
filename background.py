@@ -8,7 +8,7 @@ from helper import Helper
 class Background(object):
 
     def setBackground(self, wallpaper):
-        Helper().printer("Settings wallpaper for %s" % (platform.system()))
+        Helper().printer("Setting wallpaper for %s" % (platform.system()))
         if platform.system() == "Windows":
             self.setWindowsBackground(wallpaper)
 

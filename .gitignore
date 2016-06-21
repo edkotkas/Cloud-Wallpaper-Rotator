@@ -2,6 +2,7 @@
 .cache
 .history
 .credentials
+log
 myconfig.json
 client_secrets.json
 wallpaper.png
