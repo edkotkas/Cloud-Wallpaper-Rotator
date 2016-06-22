@@ -1,5 +1,6 @@
 import os
 import time
+import sys
 
 
 class Helper(object):
@@ -13,6 +14,7 @@ class Helper(object):
         notice = "[CWR] NOTICE <%s>: %s." %\
             (time.strftime("%H:%M:%S"), message)
 
-        print(notice)
-        with open("log", "a") as log:
+        print(notice, "\n", sys.stderr)
+
+        with open(self.realPath("log"), "a") as log:
             log.writelines(notice + "\n")
