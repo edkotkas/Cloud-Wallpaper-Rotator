@@ -5,7 +5,9 @@ import time
 class Helper(object):
 
     def __init__(self):
-        self.realPath = lambda fileReference: os.path.realpath(fileReference)
+        self.realPath = lambda fileReference: "/".join(
+            os.path.realpath(__file__).split("/")[:-1]
+        ) + "/" + fileReference
 
     def printer(self, message):
         notice = "[CWR] NOTICE <%s>: %s." %\
